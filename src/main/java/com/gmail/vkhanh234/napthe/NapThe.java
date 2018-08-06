@@ -191,6 +191,13 @@ public final class NapThe extends JavaPlugin{
             @Override
             public void run() {
                 List<Card> list = searchCard(s);
+                Collections.sort(list, new Comparator<Card>() {
+                    @Override
+                    public int compare(Card o1, Card o2) {
+                        return Long.valueOf(o2.timestamp).compareTo(Long.valueOf(o1.timestamp));
+                    }
+                });
+
                 int amount = mc.getRowPerPage();
                 int maxPage = Double.valueOf(Math.ceil(list.size()*1.0/amount)).intValue();
                 sender.sendMessage(getMessage("search.message").replace("{page}",page+"").replace("{total}",maxPage+""));
@@ -205,6 +212,41 @@ public final class NapThe extends JavaPlugin{
                         ((Player) sender).spigot().sendMessage(message);
                     }
                     else sender.sendMessage(msg);
+                }
+            }
+        });
+    }
+
+    public void showHistory(CommandSender sender, final OfflinePlayer p, final int page){
+        sender.sendMessage(getMessage("history.loading"));
+        boolean self = ((sender instanceof Player) && ((Player) sender).getUniqueId().equals(p.getUniqueId()));
+        Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
+            @Override
+            public void run() {
+                PlayerData playerData = p.isOnline()?playerController.getPlayerData((Player) p):data.loadPlayer(p);
+                if(playerData==null) return;
+
+                ArrayList<Card> list = new ArrayList<>(playerData.getCards().values());
+                Collections.sort(list, new Comparator<Card>() {
+                    @Override
+                    public int compare(Card o1, Card o2) {
+                        return Long.valueOf(o2.timestamp).compareTo(Long.valueOf(o1.timestamp));
+                    }
+                });
+
+                int amount = mc.getRowPerPage();
+                int maxPage = Double.valueOf(Math.ceil(list.size()*1.0/amount)).intValue();
+                sender.sendMessage(getMessage("history.message").replace("{player}",p.getName()).replace("{page}",page+"").replace("{total}",maxPage+""));
+                if(page<1 || page>maxPage) return;
+                for(int i=(page-1)*amount;(i<page*amount && i<list.size());i++){
+                    Card c = list.get(i);
+                    sender.sendMessage(c.applyPlaceholder(getMessage("history.card")));
+                }
+                if(self){
+                    Player p = (Player) sender;
+                    for(Card c:list){
+                        if(!c.seen) notifyCard(p,c);
+                    }
                 }
             }
         });
@@ -234,34 +276,6 @@ public final class NapThe extends JavaPlugin{
             else i++;
         }
         return new Card(map);
-    }
-
-    public void showHistory(CommandSender sender, final OfflinePlayer p, final int page){
-        sender.sendMessage(getMessage("history.loading"));
-        boolean self = ((sender instanceof Player) && ((Player) sender).getUniqueId().equals(p.getUniqueId()));
-        Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
-            @Override
-            public void run() {
-                PlayerData playerData = p.isOnline()?playerController.getPlayerData((Player) p):data.loadPlayer(p);
-                if(playerData==null) return;
-                ArrayList<Card> list = new ArrayList<>(playerData.getCards().values());
-                Collections.reverse(list);
-                int amount = mc.getRowPerPage();
-                int maxPage = Double.valueOf(Math.ceil(list.size()*1.0/amount)).intValue();
-                sender.sendMessage(getMessage("history.message").replace("{player}",p.getName()).replace("{page}",page+"").replace("{total}",maxPage+""));
-                if(page<1 || page>maxPage) return;
-                for(int i=(page-1)*amount;(i<page*amount && i<list.size());i++){
-                    Card c = list.get(i);
-                    sender.sendMessage(c.applyPlaceholder(getMessage("history.card")));
-                }
-                if(self){
-                    Player p = (Player) sender;
-                    for(Card c:list){
-                        if(!c.seen) notifyCard(p,c);
-                    }
-                }
-            }
-        });
     }
 
 

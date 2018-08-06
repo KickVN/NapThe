@@ -289,7 +289,7 @@ public class MysqlData implements Data {
         try {
             connection = ds.getConnection();
             statement = connection.createStatement();
-            res = statement.executeQuery("SELECT * FROM "+table+" WHERE "+where+" ORDER BY `timestamp`;");
+            res = statement.executeQuery("SELECT * FROM "+table+" WHERE "+where+";");
             while (res.next()) {
                 result.add(new Card(res));
             }

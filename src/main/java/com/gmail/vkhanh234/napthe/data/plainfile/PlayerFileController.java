@@ -107,12 +107,6 @@ public class PlayerFileController {
                 if(base.isSimilar(c)) result.add(c);
             }
         }
-        Collections.sort(result, new Comparator<Card>() {
-            @Override
-            public int compare(Card o1, Card o2) {
-                return o2.amount-o1.amount;
-            }
-        });
         return result;
     }
 }
