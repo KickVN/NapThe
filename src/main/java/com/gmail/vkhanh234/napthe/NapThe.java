@@ -139,7 +139,7 @@ public final class NapThe extends JavaPlugin{
             sender.sendMessage(ChatColor.GOLD+"/napthe info"+ChatColor.RESET+" - thông tin Plugin");
         }
         if(hasPermission(sender,"admin")){
-            sender.sendMessage(ChatColor.GOLD+"/napthe choose <nhà_mạng> [true/false]"+ChatColor.RESET+" - chọn nhà mạng. True/false để bật/tắt hiển thị lựa chọn cho mệnh giá.");
+            sender.sendMessage(ChatColor.GOLD+"/napthe choose <nhà_mạng> [true/false]"+ChatColor.RESET+" - chọn nhà mạng. True/false để tắt/bật hiển thị lựa chọn cho mệnh giá.");
             sender.sendMessage(ChatColor.GOLD+"/napthe price <giá_tiền>"+ChatColor.RESET+" - chọn giá tiền. Sử dụng sau khi chọn mạng.");
             sender.sendMessage(ChatColor.GOLD+"/napthe reload"+ChatColor.RESET+" - reload config");
             if(data.isDetailAvailable()) sender.sendMessage(ChatColor.GOLD+"/napthe thongke [seconds]"+ChatColor.RESET+" - thống kê tổng tiền (trong khoảng thời gian)");
