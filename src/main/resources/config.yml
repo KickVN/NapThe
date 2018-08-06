@@ -7,6 +7,7 @@
 #     Để xác nhận thẻ đúng, dùng lệnh "/napthe setcardcode <card_id> 200". Thay 200 bằng 202 nếu muốn xác nhận là thẻ sai.
 #     Người chơi cần dùng lệnh "/napthe lichsu" để nhận phần thưởng.
 # [page] là số thứ tự của trang. Mặc định là 1.
+# <card_id> là ID của thẻ. Mặc định là giá trị đầu tiên hiển thị sau khi sử dụng lệnh "/napthe timkiem ...".
 # [seconds] là thời gian dưới dạng giây. Mặc định là tất cả.
 Mode: GameBank
 GameBank:
