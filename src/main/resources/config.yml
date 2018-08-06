@@ -1,0 +1,189 @@
+# NapThe - KickVN
+# -----------------------
+#Chế độ nạp thẻ
+# GameBank - Sử dụng API của https://sv.gamebank.vn để nạp tự động
+# Manual - Lưu thẻ mà người chơi nhập. Phải xác nhận bằng tay.
+#     Nếu sử dụng mode Manual. Thẻ đã nhập sẽ có code (mã trạng thái) là 201. Để xem danh sách thẻ chờ xác nhận, dùng lệnh "/napthe timkiem [page] -code 201".
+#     Để xác nhận thẻ đúng, dùng lệnh "/napthe setcardcode <card_id> 200". Thay 200 bằng 202 nếu muốn xác nhận là thẻ sai.
+#     Người chơi cần dùng lệnh "/napthe lichsu" để nhận phần thưởng.
+# [page] là số thứ tự của trang. Mặc định là 1.
+# [seconds] là thời gian dưới dạng giây. Mặc định là tất cả.
+Mode: GameBank
+GameBank:
+  # Thông tin nhận được từ web hoặc nhân viên của gamebank
+  merchant_id: ""
+  api_user: ""
+  api_password: ""
+  # Thời gian (tick) kiểm tra trạng thái nhà mạng (đang bảo trì hay mở). 20 ticks ~ 1 giây. 6000 ticks ~ 5 phút.
+  status_check_interval: 6000
+
+#Danh sách mạng. Bạn có thể tự thêm nhà mạng khác (nếu có) với cấu trúc tương tự như bên dưới.
+Mang:
+  VINAPHONE:
+    # Bật (true) hoặc tắt (false) tùy ý bạn. Người chơi không thể chọn nhà mạng đã tắt. Nhà mạng đang bật nhưng Mode đang chọn đang bảo trì thì sẽ tự động tắt (VD như khi GameBank bảo trì viettel).
+    enable: true
+    # Nội dung được hiển thị cho người chơi
+    text: "Vinaphone"
+  MOBIFONE:
+    enable: false
+    text: "Mobifone"
+  VIETTEL:
+    enable: true
+    text: "Viettel"
+  VTC:
+    enable: false
+    text: "VTC"
+  VIETNAMMOBILE:
+    enable: false
+    text: "VietNamMobile"
+  GATE:
+    enable: false
+    text: "Gate"
+
+# Chọn mệnh giá thẻ
+ChoosePrice:
+  # Bật/tắt. Tắt thì người chơi sẽ không cần chọn mệnh giá thẻ sau khi chọn nhà mạng.
+  enable: true
+  # Các mệnh giá. Cấu trúc tương tự như nhà mạng. Bạn cũng có thể tùy ý thêm giá mới nếu cần.
+  values:
+    10000:
+      enable: true
+      text: "10.000"
+    20000:
+      enable: true
+      text: "20.000"
+    30000:
+      enable: true
+      text: "30.000"
+    50000:
+      enable: true
+      text: "50.000"
+    100000:
+      enable: true
+      text: "100.000"
+    200000:
+      enable: true
+      text: "200.000"
+    300000:
+      enable: true
+      text: "300.000"
+    500000:
+      enable: true
+      text: "500.000"
+    1000000:
+      enable: true
+      text: "1.000.000"
+
+# Phần thưởng người chơi nhận được dưới dạng command console sau khi nạp thành công. Tương tự, bạn có thể tùy ý thêm phần thưởng cho giá khác hoặc thêm command phần thưởng.
+Prize:
+  #10 ~ Cho thẻ 10k
+  10:
+    - p give {player} 10
+  20:
+    - p give {player} 20
+  30:
+  - p give {player} 30
+  50:
+    - p give {player} 50
+  100:
+    - p give {player} 100
+  200:
+    - p give {player} 200
+  300:
+  - p give {player} 300
+  500:
+    - p give {player} 500
+  1000:
+  - p give {player} 1000
+
+# Kiểm tra giá trị của seri/pin nhập vào. Không động vào nếu bạn không hiểu rõ cách hoạt động.
+Input_Regex: '\d+'
+# Chuỗi kí tự để khi người chơi đang nhập seri/pin mà nhập vào thì sẽ ngừng, không nhập seri/pin nữa.
+Cancel_Text: "HUY"
+# Một số lệnh hiện danh sách sẽ có nhiều trang. Đây là số phần tử trong mỗi trang.
+Row_Per_page: 10
+
+# Dữ liệu
+Data:
+  # 2 kiểu: plainfile hoặc mysql
+  type: "plainfile"
+  # Lưu dữ liệu dưới dạng file bên trong folder của plugin
+  plainfile:
+    # Bật/tắt lưu dữ liệu chi tiết của người chơi. Nếu đang dùng chế độ plainfile, bạn phải bật cái này nếu muốn dùng một số chức năng nâng cao (tìm kiếm, lịch sử,...).
+    player_data: true
+    # Lưu log ngắn gọn trong các file txt để dễ kiểm tra
+    quick_logs: true
+    # Nội dung của log
+    log_text:
+      correct: '{player} | {date} | SERI {seri} | PIN {pin} | MANG {mang} | TIEN {amount}'
+      waiting: '{player} | {date} | SERI {seri} | PIN {pin} | MANG {mang} | TIEN {amount}'
+      wrong: '{player} | {date} | SERI {seri} | PIN {pin} | MANG {mang} | TIEN {amount} | LOI {code}: {message}'
+  # Lưu trên MySQL
+  mysql:
+    # Các thông tin của máy chủ mysql
+    ip: "localhost"
+    port: 3306
+    user: "root"
+    password: ""
+    database: "napthe"
+    # Tiền tố của table. Nếu bạn không hiểu cái này là gì thì không nên sửa.
+    table_prefix: ""
+    # Bật thì có khả năng sẽ tăng tốc độ xử lý của dữ liệu. Nhưng đồng thời cũng làm server nặng hơn 1 tí.
+    cache: false
+  # Chọn trạng thái thẻ cần lưu
+  save:
+    # Bật/tắt lưu thẻ đúng
+    correct_card: true
+    # Tương tự, thẻ sai
+    wrong_card: true
+    # Thẻ đang đợi xác nhận
+    waiting_card: true
+
+# Một số message có hỗ trợ placeholder để lấy thông tin của thẻ cào.
+# Các placeholder đó gồm có: {id}, {seri}, {pin}, {mang}, {date}, {amount}, {code}, {message}
+Message:
+  hover: "Nhấn vào để chọn"
+  choose: "&cChọn nhà mạng"
+  pricechoose: "&aChọn giá thẻ"
+  seri: "&cHãy nhập số SERI. Nhập &aHUY &cđể hủy."
+  enteredSeri: "Bạn đã nhập SERI: {value}"
+  pin: "&cHãy nhập số PIN. Nhập &aHUY &cđể hủy."
+  enteredPin: "Bạn đã nhập PIN: {value}"
+  wrongInput: "Vui lòng chỉ nhập số. Hoặc nhập &aHUY &cđể hủy."
+  cancelled: "Đã hủy"
+  noPerm: "Bạn không có perm thực hiện hành động này"
+  success: "Thành công"
+  fail: "Thất bại"
+  theSai: "Mã thẻ không đúng"
+  total: "Tổng tiền: {value}"
+  purge:
+    message: "Đang xóa dữ liệu trước thời điểm {date}..."
+    done: "Đã xóa dữ liệu xong!"
+  status:
+    message: "Trạng thái các nhà mạng:"
+    mang: "{mang}: {status}"
+    true: "Đang mở"
+    false: "Đang bảo trì"
+  top:
+    loading: "Đang load Top..."
+    message: "Danh sách Top ({page}/{total})"
+    player: "{index}. {player}: {value}"
+  history:
+    loading: "Đang load lịch sử..."
+    message: "Lịch sử nạp thẻ của {player} ({page}/{total})"
+    card: "{date} Mạng:{mang} Seri:{seri} Pin:{pin} Gia:{amount} {message}"
+  search:
+    loading: "Đang load kết quả tìm kiếm..."
+    message: "Kết quả tìm kiếm ({page}/{total})"
+    card: "{id} - {date} - {mang} - S: {seri} - P: {pin} - $:{amount} - C: {code}"
+  # Thông báo sau khi nạp. Bạn có thể tự thêm cho các code (mã trạng thái) khác nếu cần thiết.
+  response_message:
+    default: "&cLỗi {code}: {message} (Card {mang} {seri} {pin})"
+    200: "&aĐã nạp thành công {amount} VND (Card {mang} {seri} {pin})"
+    201: "&bVui lòng chờ duyệt"
+    202: "&cThẻ &a{mang} &e{seri} &b{pin} &ckhông được chấp nhận"
+  # Mô tả ngắn gọn của các code (mã trạng thái). Dùng để lưu trong dữ liệu.
+  response_text:
+    200: "Thành công"
+    201: "Đang chờ duyệt"
+    202: "Thẻ sai"

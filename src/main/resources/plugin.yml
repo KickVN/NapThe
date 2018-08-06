@@ -1,0 +1,13 @@
+name: NapThe
+main: com.gmail.vkhanh234.napthe.NapThe
+version: ${project.version}
+commands:
+   NapThe:
+      usage: /napthe
+permissions:
+    NapThe.command:
+        description: Allows you to use command.
+        default: true
+    NapThe.admin:
+        description: Allows you to use admin's command.
+        default: op
