@@ -1,6 +1,7 @@
 package com.gmail.vkhanh234.napthe;
 
 import com.gmail.vkhanh234.napthe.data.*;
+import com.gmail.vkhanh234.napthe.hook.Placeholder;
 import com.gmail.vkhanh234.napthe.type.Type;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -32,6 +33,10 @@ public final class NapThe extends JavaPlugin{
 
         playerController = new PlayerController();
         loadPlayers();
+
+        if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
+            new Placeholder().hook();
+        }
     }
 
     public void onDisable() {
@@ -168,11 +173,16 @@ public final class NapThe extends JavaPlugin{
     private void showStatus(CommandSender sender) {
         sender.sendMessage(getMessage("status.message"));
         for(String s:mc.getNhamang().keySet()){
-            String msg = getMessage("status.mang").replace("{mang}",mc.getNhamang().get(s).text);
-            if(!mc.getNhamang().get(s).enable) sender.sendMessage(msg.replace("{status}",getMessage("status.false")));
-            else if(type.getStatus().containsKey(s)) sender.sendMessage(msg.replace("{status}",getMessage("status.true")));
-            else sender.sendMessage(msg.replace("{status}",getMessage("status.not_working")));
+            String msg = getMessage("status.mang").replace("{mang}",mc.getNhamang().get(s).text).replace("{status}",getStatusText(s));
+            sender.sendMessage(msg);
         }
+    }
+
+    public String getStatusText(String s){
+        if(!mc.getNhamang().containsKey(s)) return getMessage("status.false");
+        if(!mc.getNhamang().get(s).enable) return getMessage("status.false");
+        else if(type.getStatus().containsKey(s)) return getMessage("status.true");
+        else return getMessage("status.not_working");
     }
 
     public void showTop(final CommandSender sender, final int page, final long time) {

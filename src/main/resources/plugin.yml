@@ -1,6 +1,7 @@
 name: NapThe
 main: com.gmail.vkhanh234.napthe.NapThe
 version: ${project.version}
+softdepend: [PlaceholderAPI]
 commands:
    NapThe:
       usage: /napthe
