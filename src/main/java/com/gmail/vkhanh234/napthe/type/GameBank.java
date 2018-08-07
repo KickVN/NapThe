@@ -56,7 +56,7 @@ public class GameBank extends Type{
 		fields.put("pin", pincode);
 		fields.put("note", c.getPlayer()==null?"error no player":c.getPlayer().getName());
 		String requests = this.createRequests(fields);
-		String get = get("http://sv.gamebank.vn/api/card2?"+requests);
+		String get = get("https://sv.gamebank.vn/api/card2?"+requests);
 		if(get==null || get=="") return null;
 		Response response = new Gson().fromJson(get,Response.class);
 		Card r = c.cloneCard();
@@ -95,7 +95,7 @@ public class GameBank extends Type{
 		try {
 			installAllTrustManager();
 			URL url = new URL(link);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setInstanceFollowRedirects(false);
 			conn.setRequestMethod("GET");
