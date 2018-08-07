@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.gmail.vkhanh234</groupId>
   <artifactId>NapThe</artifactId>
-  <version>3.1.0</version>
+  <version>3.1.1</version>
      <build>
           <plugins>
               <plugin>
