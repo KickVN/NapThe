@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.gmail.vkhanh234</groupId>
   <artifactId>NapThe</artifactId>
-  <version>3.0.1</version>
+  <version>3.0</version>
      <build>
           <plugins>
               <plugin>
@@ -33,6 +33,11 @@
             <artifactId>spigot-api</artifactId>
             <version>1.12-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.6</version>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
