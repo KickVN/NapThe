@@ -160,6 +160,11 @@ Message:
   purge:
     message: "Đang xóa dữ liệu trước thời điểm {date}..."
     done: "Đã xóa dữ liệu xong!"
+  status:
+    message: "Trạng thái các nhà mạng:"
+    mang: "{mang}: {status}"
+    true: "Đang mở"
+    false: "Đang bảo trì"
   top:
     loading: "Đang load Top..."
     message: "Danh sách Top ({page}/{total})"
