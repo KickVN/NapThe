@@ -46,9 +46,13 @@ public final class NapThe extends JavaPlugin{
                     reloadConfig();
                     initConfig();
                     sender.sendMessage(ChatColor.GREEN + "Reload thành công!");
-                } else if (args.length>=2 && (args[0].equalsIgnoreCase("choose")) &&
-                        (type.getStatus().containsKey(args[1].toUpperCase()))) {
-                    activeMode((Player) sender, args[1],args.length>=3?Boolean.parseBoolean(args[2]):true);
+                } else if (args.length>=2 && (args[0].equalsIgnoreCase("choose"))) {
+                    String id = args[1].toUpperCase();
+                    if (!type.getStatus().containsKey(id)){
+                        showStatus(sender);
+                        return true;
+                    }
+                    activeMode((Player) sender, id,args.length>=3?Boolean.parseBoolean(args[2]):true);
                 }
                 else if(args.length>=2 && (args[0].equalsIgnoreCase("price")) && mc.getPrices().containsKey(args[1])){
                     choosePrice((Player) sender,args[1]);
@@ -58,6 +62,9 @@ public final class NapThe extends JavaPlugin{
                     if(p!=null){
                         sendPrize(p,Integer.parseInt(args[2]));
                     }
+                }
+                else if(args[0].equalsIgnoreCase("status")){
+                    showStatus(sender);
                 }
                 else if(args[0].equalsIgnoreCase("top") && data.isDetailAvailable()){
                     int page = args.length>=2?Integer.valueOf(args[1]):1;
@@ -134,6 +141,7 @@ public final class NapThe extends JavaPlugin{
 
     private void showHelp(CommandSender sender) {
         if(hasPermission(sender,"command")){
+            sender.sendMessage(ChatColor.GOLD+"/napthe status"+ChatColor.RESET+" - xem trạng thái của các nhà mạng");
             if(data.isDetailAvailable()) sender.sendMessage(ChatColor.GOLD+"/napthe top [page] [seconds]"+ChatColor.RESET+" - xem Top nạp thẻ (trong khoảng thời gian)");
             if(data.isDetailAvailable()) sender.sendMessage(ChatColor.GOLD+"/napthe lichsu [page]"+ChatColor.RESET+" - xem lịch sử nạp thẻ và nhận thưởng");
             sender.sendMessage(ChatColor.GOLD+"/napthe info"+ChatColor.RESET+" - thông tin Plugin");
@@ -157,14 +165,15 @@ public final class NapThe extends JavaPlugin{
         return false;
     }
 
-//    private void showStatus(CommandSender sender) {
-//        sender.sendMessage(getMessage("status.message"));
-//        for(String s:mc.getNhamang().keySet()){
-//            String msg = getMessage("status.mang").replace("{mang}",mc.getNhamang().get(s));
-//            if(type.getStatus().containsKey(s)) sender.sendMessage(msg.replace("{status}",getMessage("status.true")));
-//            else sender.sendMessage(msg.replace("{status}",getMessage("status.false")));
-//        }
-//    }
+    private void showStatus(CommandSender sender) {
+        sender.sendMessage(getMessage("status.message"));
+        for(String s:mc.getNhamang().keySet()){
+            String msg = getMessage("status.mang").replace("{mang}",mc.getNhamang().get(s).text);
+            if(!mc.getNhamang().get(s).enable) sender.sendMessage(msg.replace("{status}",getMessage("status.false")));
+            else if(type.getStatus().containsKey(s)) sender.sendMessage(msg.replace("{status}",getMessage("status.true")));
+            else sender.sendMessage(msg.replace("{status}",getMessage("status.not_working")));
+        }
+    }
 
     public void showTop(final CommandSender sender, final int page, final long time) {
         sender.sendMessage("top.loading");

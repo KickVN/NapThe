@@ -161,10 +161,11 @@ Message:
     message: "Đang xóa dữ liệu trước thời điểm {date}..."
     done: "Đã xóa dữ liệu xong!"
   status:
-    message: "Trạng thái các nhà mạng:"
+    message: "&aTrạng thái các nhà mạng:"
     mang: "{mang}: {status}"
-    true: "Đang mở"
-    false: "Đang bảo trì"
+    true: "&aĐang mở"
+    false: "&cĐang tắt"
+    not_working: "&bĐang bảo trì"
   top:
     loading: "Đang load Top..."
     message: "Danh sách Top ({page}/{total})"

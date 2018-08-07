@@ -29,7 +29,7 @@ public class MainConfig {
     String filename = "config.yml";
 
     HashMap<String,List<String>> prizes = new HashMap<>();
-    LinkedHashMap<String,String> nhamang = new LinkedHashMap<>();
+    LinkedHashMap<String,Nhamang> nhamang = new LinkedHashMap<>();
     String mode;
     boolean priceEnable;
     LinkedHashMap<String,String> prices = new LinkedHashMap<>();
@@ -88,7 +88,7 @@ public class MainConfig {
         ConfigurationSection cs = config.getConfigurationSection("ChoosePrice.values");
         for(String k:cs.getKeys(false)){
             if(!cs.getBoolean(k+".enable")) continue;
-            prices.put(k,cs.getString(k+".text"));
+            prices.put(k,KUtils.convertColor(cs.getString(k+".text")));
         }
 
     }
@@ -103,8 +103,8 @@ public class MainConfig {
     private void loadMang() {
         ConfigurationSection cs = config.getConfigurationSection("Mang");
         for(String k:cs.getKeys(false)){
-            if(!cs.getBoolean(k+".enable")) continue;
-            nhamang.put(k.toUpperCase(),cs.getString(k+".text"));
+//            if(!cs.getBoolean(k+".enable")) continue;
+            nhamang.put(k.toUpperCase(),new Nhamang(cs.getBoolean(k+".enable"),KUtils.convertColor(cs.getString(k+".text"))));
         }
     }
 
@@ -171,7 +171,7 @@ public class MainConfig {
         return prizes.get(s);
     }
 
-    public HashMap<String, String> getNhamang() {
+    public HashMap<String, Nhamang> getNhamang() {
         return nhamang;
     }
 
@@ -204,5 +204,15 @@ public class MainConfig {
 
     public String getCancelText() {
         return cancelText;
+    }
+
+    public class Nhamang{
+        public boolean enable;
+        public String text;
+
+        public Nhamang(boolean enable, String text) {
+            this.enable = enable;
+            this.text = text;
+        }
     }
 }
