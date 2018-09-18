@@ -75,6 +75,6 @@ public class CommandManager {
     private boolean hasPerm(CommandSender sender, BaseCommand c) {
         if(c.getId()==null) return false;
         if(c.isIgnorePerm()) return true;
-        return sender.hasPermission(NapThe.getPlugin().getName()+".command.*") || sender.hasPermission(NapThe.getPlugin().getName()+".command."+c.getId());
+        return sender.hasPermission(NapThe.getPlugin().getName()+".command.*") || sender.hasPermission(NapThe.getPlugin().getName()+".admin") || sender.hasPermission(NapThe.getPlugin().getName()+".command."+c.getId());
     }
 }

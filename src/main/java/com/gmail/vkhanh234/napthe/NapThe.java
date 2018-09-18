@@ -72,25 +72,6 @@ public final class NapThe extends JavaPlugin{
         });
     }
 
-    private void showHelp(CommandSender sender) {
-        if(hasPermission(sender,"command")){
-            sender.sendMessage(ChatColor.GOLD+"/napthe status"+ChatColor.RESET+" - xem trạng thái của các nhà mạng");
-            if(data.isDetailAvailable()) sender.sendMessage(ChatColor.GOLD+"/napthe top [page] [seconds]"+ChatColor.RESET+" - xem Top nạp thẻ (trong khoảng thời gian)");
-            if(data.isDetailAvailable()) sender.sendMessage(ChatColor.GOLD+"/napthe lichsu [page]"+ChatColor.RESET+" - xem lịch sử nạp thẻ và nhận thưởng");
-            sender.sendMessage(ChatColor.GOLD+"/napthe info"+ChatColor.RESET+" - thông tin Plugin");
-        }
-        if(hasPermission(sender,"admin")){
-            sender.sendMessage(ChatColor.GOLD+"/napthe choose <nhà_mạng> [true/false]"+ChatColor.RESET+" - chọn nhà mạng. True/false để tắt/bật hiển thị lựa chọn cho mệnh giá.");
-            sender.sendMessage(ChatColor.GOLD+"/napthe price <giá_tiền>"+ChatColor.RESET+" - chọn giá tiền. Sử dụng sau khi chọn mạng.");
-            sender.sendMessage(ChatColor.GOLD+"/napthe reload"+ChatColor.RESET+" - reload config");
-            if(data.isDetailAvailable()) sender.sendMessage(ChatColor.GOLD+"/napthe thongke [seconds]"+ChatColor.RESET+" - thống kê tổng tiền (trong khoảng thời gian)");
-            if(data.isDetailAvailable()) sender.sendMessage(ChatColor.GOLD+"/napthe lichsu [player]"+ChatColor.RESET+" - xem lịch sử nạp thẻ của người chơi khác");
-            if(data.isDetailAvailable()) sender.sendMessage(ChatColor.GOLD+"/napthe timkiem [page] [query]"+ChatColor.RESET+" - tìm card");
-            if(data.isDetailAvailable()) sender.sendMessage(ChatColor.GOLD+"/napthe purge [seconds]"+ChatColor.RESET+" - xóa dữ liệu đã tồn tại lâu hơn khoảng thời gian [seconds]");
-            sender.sendMessage(ChatColor.GOLD+"/napthe give <player> <tiền>"+ChatColor.RESET+" - trao phần thưởng cho người chơi");
-        }
-    }
-
     public boolean hasPermission(CommandSender sender, String p) {
         if(sender.isOp()) return true;
         if(sender.hasPermission("napthe."+p)) return true;
