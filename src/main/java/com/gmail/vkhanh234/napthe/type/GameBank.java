@@ -164,6 +164,7 @@ public class GameBank extends Type{
 			case("VIETTEL"): return "1";
 			case("MOBI"): return "2";
 			case("VINA"): return "3";
+			case("VINAPHONE"): return "3";
 			case("GATE"): return "4";
 		}
 		return null;

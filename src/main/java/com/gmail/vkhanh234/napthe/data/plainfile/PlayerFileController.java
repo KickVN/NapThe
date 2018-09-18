@@ -37,12 +37,6 @@ public class PlayerFileController {
             if(amount==0) continue;
             top.add(new TopEntry(data.getName(),amount));
         }
-        Collections.sort(top, new Comparator<TopEntry>() {
-            @Override
-            public int compare(TopEntry o1, TopEntry o2) {
-                return o1.amount-o2.amount;
-            }
-        });
         return top;
     }
 

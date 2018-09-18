@@ -143,6 +143,7 @@ Data:
 # Một số message có hỗ trợ placeholder để lấy thông tin của thẻ cào.
 # Các placeholder đó gồm có: {id}, {seri}, {pin}, {mang}, {date}, {amount}, {code}, {message}
 Message:
+  successReload: "&aReload thành công"
   hover: "Nhấn vào để chọn"
   choose: "&cChọn nhà mạng"
   pricechoose: "&aChọn giá thẻ"

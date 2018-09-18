@@ -99,7 +99,9 @@ public class MysqlData implements Data {
             statement = connection.createStatement();
             res = statement.executeQuery("SELECT playername,amount FROM "+table+" WHERE `timestamp`>="+(System.currentTimeMillis()-time)+" AND code=200;");
             while (res.next()) {
-                map.put(res.getString("playername"),res.getInt("amount"));
+                String pname = res.getString("playername");
+                if(!map.containsKey(pname)) map.put(pname,0);
+                map.put(pname,map.get(pname)+res.getInt("amount"));
             }
             for(String k:map.keySet()) top.add(new TopEntry(k,map.get(k)));
         } catch (SQLException e) {

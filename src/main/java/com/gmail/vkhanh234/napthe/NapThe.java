@@ -1,5 +1,6 @@
 package com.gmail.vkhanh234.napthe;
 
+import com.gmail.vkhanh234.napthe.command.CommandManager;
 import com.gmail.vkhanh234.napthe.data.*;
 import com.gmail.vkhanh234.napthe.hook.Placeholder;
 import com.gmail.vkhanh234.napthe.type.Type;
@@ -24,7 +25,7 @@ public final class NapThe extends JavaPlugin{
     private MainConfig mc;
     private Data data;
     private PlayerController playerController;
-
+    private CommandManager commandManager;
     public void onEnable()
     {
         this.plugin = this;
@@ -33,6 +34,8 @@ public final class NapThe extends JavaPlugin{
 
         playerController = new PlayerController();
         loadPlayers();
+
+        commandManager = new CommandManager();
 
         if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
             new Placeholder().hook();
@@ -45,86 +48,11 @@ public final class NapThe extends JavaPlugin{
 
     public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args)
     {
-        if(hasPermission(sender, "command")) {
-            if (args.length >= 1) {
-                if (args[0].equalsIgnoreCase("reload") && hasPermission(sender, "admin")) {
-                    reloadConfig();
-                    initConfig();
-                    sender.sendMessage(ChatColor.GREEN + "Reload thành công!");
-                } else if (args.length>=2 && (args[0].equalsIgnoreCase("choose"))) {
-                    String id = args[1].toUpperCase();
-                    if (!type.getStatus().containsKey(id)){
-                        showStatus(sender);
-                        return true;
-                    }
-                    activeMode((Player) sender, id,args.length>=3?Boolean.parseBoolean(args[2]):true);
-                }
-                else if(args.length>=2 && (args[0].equalsIgnoreCase("price")) && mc.getPrices().containsKey(args[1])){
-                    choosePrice((Player) sender,args[1]);
-                }
-                else if (args.length==3 && (args[0].equalsIgnoreCase("give"))  && hasPermission(sender, "admin")){
-                    Player p = Bukkit.getPlayer(args[1]);
-                    if(p!=null){
-                        sendPrize(p,Integer.parseInt(args[2]));
-                    }
-                }
-                else if(args[0].equalsIgnoreCase("status")){
-                    showStatus(sender);
-                }
-                else if(args[0].equalsIgnoreCase("top") && data.isDetailAvailable()){
-                    int page = args.length>=2?Integer.valueOf(args[1]):1;
-                    long time = args.length>=3?Long.valueOf(args[2])*1000:System.currentTimeMillis();
-                    showTop(sender,page,time);
-                }
-                else if(args[0].equalsIgnoreCase("lichsu") && data.isDetailAvailable()){
-                    if(args.length>=2 && !args[1].matches("\\d+")){
-                        if(hasPermission(sender,"admin")) showHistory(sender,Bukkit.getOfflinePlayer(args[1]), args.length >= 3 ? Integer.valueOf(args[2]):1);
-                    }
-                    else {
-                        int page = args.length >= 2 ? Integer.valueOf(args[1]) : 1;
-                        showHistory(sender,(Player) sender, page);
-                    }
-                }
-                else if(args[0].equalsIgnoreCase("purge") && data.isDetailAvailable() && hasPermission(sender,"admin") && args.length>=2){
-                    long time = Long.parseLong(args[1])*1000;
-                    purge(sender,time);
-                }
-                else if(args[0].equalsIgnoreCase("timkiem") && data.isDetailAvailable() && hasPermission(sender,"admin") && args.length>=3){
-                    int start = args[1].startsWith("-")?1:2;
-                    String s = args[start];
-                    for(int i=start+1;i<args.length;i++) s+=" "+args[i];
-                    showSearch(sender, s,start==1?1:Integer.valueOf(args[1]));
-                }
-                else if(args[0].equalsIgnoreCase("thongke") && hasPermission(sender, "admin")){
-                    final long time = args.length>=2?Long.valueOf(args[1])*1000:System.currentTimeMillis();
-                    Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
-                        @Override
-                        public void run() {
-                            sender.sendMessage(getMessage("total").replace("{value}",data.getTotalAmount(time)+""));
-                        }
-                    });
-                }
-                else if(args[0].equalsIgnoreCase("setcardcode") && hasPermission(sender,"admin") && args.length>=3 && args[2].matches("\\d+")){
-                    String id = args[1];
-                    int code = Integer.valueOf(args[2]);
-                    setCardCode(sender,id,code);
-                }
-                else if(args[0].equalsIgnoreCase("info")){
-                    sender.sendMessage(ChatColor.GREEN+"Plugin "+ChatColor.AQUA+ChatColor.BOLD+"napthe "+ChatColor.GREEN
-                    +"phiên bản "+ChatColor.AQUA+ChatColor.BOLD+getDescription().getVersion()+ChatColor.GREEN+" được làm bởi "+ChatColor.AQUA+ChatColor.BOLD+"KickVN");
-                }
-                else{
-                    showHelp(sender);
-                }
-            } else {
-                sendChooser((Player) sender);
-            }
-        }
-
+        commandManager.onCommand(sender,cmd,label,args);
         return true;
     }
 
-    private void purge(CommandSender sender, long time) {
+    public void purge(CommandSender sender, long time) {
         final long timestamp = System.currentTimeMillis()-time;
         sender.sendMessage(getMessage("purge.message").replace("{date}", KUtils.getDateText(timestamp)));
         Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
@@ -163,14 +91,14 @@ public final class NapThe extends JavaPlugin{
         }
     }
 
-    private boolean hasPermission(CommandSender sender, String p) {
+    public boolean hasPermission(CommandSender sender, String p) {
         if(sender.isOp()) return true;
         if(sender.hasPermission("napthe."+p)) return true;
         sender.sendMessage(getMessage("noPerm"));
         return false;
     }
 
-    private void showStatus(CommandSender sender) {
+    public void showStatus(CommandSender sender) {
         sender.sendMessage(getMessage("status.message"));
         for(String s:mc.getNhamang().keySet()){
             String msg = getMessage("status.mang").replace("{mang}",mc.getNhamang().get(s).text).replace("{status}",getStatusText(s));
@@ -192,6 +120,12 @@ public final class NapThe extends JavaPlugin{
             public void run() {
                 List<TopEntry> top = data.getTop(time);
                 if(top==null) return;
+                Collections.sort(top, new Comparator<TopEntry>() {
+                    @Override
+                    public int compare(TopEntry o1, TopEntry o2) {
+                        return o2.amount-o1.amount;
+                    }
+                });
                 int amount = mc.getRowPerPage();
                 int maxPage = Double.valueOf(Math.ceil(top.size()*1.0/amount)).intValue();
                 sender.sendMessage(getMessage("top.message").replace("{page}",page+"").replace("{total}",maxPage+""));
@@ -354,7 +288,7 @@ public final class NapThe extends JavaPlugin{
         }
     }
 
-    private void sendPrize(final Player p, final int amount) {
+    public void sendPrize(final Player p, final int amount) {
         Bukkit.getScheduler().runTask(this, new Runnable() {
             @Override
             public void run() {
@@ -376,7 +310,7 @@ public final class NapThe extends JavaPlugin{
         });
     }
 
-    private void activeMode(Player p, String mang, boolean showprice)
+    public void activeMode(Player p, String mang, boolean showprice)
     {
         ChatStatus c = new ChatStatus();
         c.setMang(mang);
@@ -394,7 +328,7 @@ public final class NapThe extends JavaPlugin{
         this.map.put(p.getUniqueId(),c);
     }
 
-    private void choosePrice(Player p, String s) {
+    public void choosePrice(Player p, String s) {
         ChatStatus c = getCard(p);
         if(c==null || !c.stage.equals(ChatStatus.Stage.PRICE)) return;
         c.setAmount(s);
@@ -433,7 +367,7 @@ public final class NapThe extends JavaPlugin{
         }
     }
 
-    private void setCardCode(CommandSender sender,String id, int code) {
+    public void setCardCode(CommandSender sender, String id, int code) {
         Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
             @Override
             public void run() {
@@ -449,7 +383,7 @@ public final class NapThe extends JavaPlugin{
         });
     }
 
-    private void initConfig()
+    public void initConfig()
     {
         mc = new MainConfig();
         mc.load();
@@ -482,5 +416,13 @@ public final class NapThe extends JavaPlugin{
 
     public Map<UUID, ChatStatus> getCardMap() {
         return map;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 }
