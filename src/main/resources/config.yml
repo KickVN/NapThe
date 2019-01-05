@@ -17,6 +17,16 @@ GameBank:
   api_password: ""
   # Thời gian (tick) kiểm tra trạng thái nhà mạng (đang bảo trì hay mở). 20 ticks ~ 1 giây. 6000 ticks ~ 5 phút.
   status_check_interval: 6000
+Recard:
+  merchant_id: ""
+  secret_key: ""
+  database:
+    ip: "localhost"
+    port: 3306
+    user: "root"
+    password: ""
+    database: "napthe"
+    table: "cards"
 
 #Danh sách mạng. Bạn có thể tự thêm nhà mạng khác (nếu có) với cấu trúc tương tự như bên dưới.
 Mang:
@@ -158,6 +168,7 @@ Message:
   fail: "Thất bại"
   theSai: "Mã thẻ không đúng"
   total: "Tổng tiền: {value}"
+  systemError: "Lỗi hệ thống!"
   purge:
     message: "Đang xóa dữ liệu trước thời điểm {date}..."
     done: "Đã xóa dữ liệu xong!"
@@ -185,8 +196,11 @@ Message:
     200: "&aĐã nạp thành công {amount} VND (Card {mang} {seri} {pin})"
     201: "&bVui lòng chờ duyệt"
     202: "&cThẻ &a{mang} &e{seri} &b{pin} &ckhông được chấp nhận"
+    203: "&aNạp thành công. Vui lòng đợi thẻ được duyệt."
   # Mô tả ngắn gọn của các code (mã trạng thái). Dùng để lưu trong dữ liệu.
   response_text:
     200: "Thành công"
     201: "Đang chờ duyệt"
     202: "Thẻ sai"
+    203: "Đang chờ duyệt"
+

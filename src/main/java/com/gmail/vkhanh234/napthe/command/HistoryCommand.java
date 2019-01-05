@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class HistoryCommand extends BaseCommand{
 
     public HistoryCommand(){
-        addAliases("lichsu");
+        addAliases("history","lichsu");
     }
 
     @Override

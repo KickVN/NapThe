@@ -15,6 +15,7 @@ public class MainListener implements Listener {
         Player p = e.getPlayer();
         ChatStatus c = NapThe.getPlugin().getCard(p);
         if(c==null) return;
+        if(c.getStage().equals(ChatStatus.Stage.DONE)) return;
         e.setCancelled(true);
         if(e.getMessage().equals(NapThe.getPlugin().getMC().getCancelText())){
             e.getPlayer().sendMessage(NapThe.getPlugin().getMessage("cancelled"));

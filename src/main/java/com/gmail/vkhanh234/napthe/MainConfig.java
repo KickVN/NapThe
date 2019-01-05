@@ -5,6 +5,7 @@ import com.gmail.vkhanh234.napthe.data.mysql.MysqlData;
 import com.gmail.vkhanh234.napthe.data.plainfile.PlainfileData;
 import com.gmail.vkhanh234.napthe.type.GameBank;
 import com.gmail.vkhanh234.napthe.type.Manual;
+import com.gmail.vkhanh234.napthe.type.Recard;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -80,6 +81,7 @@ public class MainConfig {
         mode = config.getString("Mode");
         if(mode.equalsIgnoreCase("GameBank")) NapThe.getPlugin().setType(new GameBank(config.getConfigurationSection("GameBank")));
         else if(mode.equalsIgnoreCase("Manual")) NapThe.getPlugin().setType(new Manual(config.getConfigurationSection("Manual")));
+        else if(mode.equalsIgnoreCase("Recard")) NapThe.getPlugin().setType(new Recard(config.getConfigurationSection("Recard")));
     }
 
     private void loadPrices() {

@@ -163,9 +163,14 @@ public class GameBank extends Type{
 		switch (supplier){
 			case("VIETTEL"): return "1";
 			case("MOBI"): return "2";
+			case("MOBIPHONE"): return "2";
+			case("MOBIFONE"): return "2";
 			case("VINA"): return "3";
 			case("VINAPHONE"): return "3";
 			case("GATE"): return "4";
+			case("VIETNAMMOBILE"): return "6";
+			case("VNM"): return "6";
+			case("Zing"): return "7";
 		}
 		return null;
 	}

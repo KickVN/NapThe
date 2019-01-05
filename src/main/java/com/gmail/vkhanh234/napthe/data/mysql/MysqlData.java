@@ -22,18 +22,8 @@ public class MysqlData implements Data {
     HikariDataSource ds;
     String table;
     public MysqlData(ConfigurationSection cs) throws SQLException {
-        String url = "jdbc:mysql://"+cs.getString("ip")+":"+cs.getInt("port")+"/"+cs.getString("database")+"?useUnicode=true&characterEncoding=utf-8";
-//        connection= DriverManager.getConnection(url,cs.getString("user"),cs.getString("password"));
+        ds = MysqlUtils.connect(cs.getString("ip"),cs.getInt("port"),cs.getString("database"),cs.getString("user"),cs.getString("password"),cs.getBoolean("cache"));
         table = cs.getString("table_prefix")+"napthe";
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(url);
-        config.setUsername(cs.getString("user"));
-        config.setPassword(cs.getString("password"));
-        config.addDataSourceProperty("cachePrepStmts", cs.getBoolean("cache"));
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-
-        ds = new HikariDataSource(config);
         checkTable();
     }
 
@@ -69,7 +59,8 @@ public class MysqlData implements Data {
                     "  `code` int(11) NOT NULL,\n" +
                     "  `seen` tinyint(1) NOT NULL,\n" +
                     "  `timestamp` bigint(20) NOT NULL,\n" +
-                    "  `message` text NOT NULL\n" +
+                    "  `message` text NOT NULL,\n" +
+                    "  `transaction_code` text\n"+
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;");
             statement.execute("ALTER TABLE `"+table+"`\n" +
                     "  ADD PRIMARY KEY (`id`);");
@@ -143,8 +134,8 @@ public class MysqlData implements Data {
         boolean b=false;
         try {
             connection = ds.getConnection();
-            statement = connection.prepareStatement("INSERT INTO "+table+" ( `uuid`, `playername`, `seri`, `pin`, `mang`, `amount`, `seen`, `code`, `timestamp`, `message`)" +
-                    " VALUES (?,?,?,?,?,?,?,?,?,?);",
+            statement = connection.prepareStatement("INSERT INTO "+table+" ( `uuid`, `playername`, `seri`, `pin`, `mang`, `amount`, `seen`, `code`, `timestamp`, `message`, `transaction_code`)" +
+                    " VALUES (?,?,?,?,?,?,?,?,?,?,?);",
                     Statement.RETURN_GENERATED_KEYS);
             statement.setString(1,p.getUniqueId());
             statement.setString(2,p.getName());
@@ -156,6 +147,7 @@ public class MysqlData implements Data {
             statement.setInt(8,c.code);
             statement.setLong(9,c.timestamp);
             statement.setString(10,c.message);
+            statement.setString(11,c.transaction_code);
             statement.executeUpdate();
             c.saved=true;
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -314,6 +306,7 @@ public class MysqlData implements Data {
         if(base.code!=null) builder.append("`code`='"+base.code+"' AND ");
         if(base.timestamp>0) builder.append("`timestamp`<='"+base.timestamp+"' AND ");
         if(base.message!=null) builder.append("`message`='"+base.message+"' AND ");
+        if(base.transaction_code!=null) builder.append("`transaction_code`='"+base.transaction_code+"' AND ");
         String res = builder.toString();
         return res.substring(0,res.lastIndexOf(" AND "));
     }

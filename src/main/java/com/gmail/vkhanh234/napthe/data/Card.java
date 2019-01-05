@@ -17,6 +17,7 @@ public class Card {
     public Integer code,amount;
     public long timestamp;
     public String id=null;
+    public String transaction_code = null;
     public Card(){
         saved=false;
         seen=false;
@@ -32,6 +33,7 @@ public class Card {
         code = cs.getInt("code");
         timestamp = cs.getLong("timestamp");
         message = cs.getString("message");
+        transaction_code = cs.getString("transaction_code");
         saved = true;
     }
 
@@ -47,6 +49,7 @@ public class Card {
         amount = card.amount;
         timestamp = card.timestamp;
         remove = card.remove;
+        transaction_code = card.transaction_code;
     }
 
     public Card(ResultSet res) throws SQLException {
@@ -59,6 +62,7 @@ public class Card {
         code = res.getInt("code");
         timestamp = res.getLong("timestamp");
         message = res.getString("message");
+        transaction_code = res.getString("transaction_code");
         saved = true;
     }
 
@@ -72,6 +76,7 @@ public class Card {
         code = map.containsKey("code")?Integer.valueOf(map.get("code")):null;
         timestamp = map.containsKey("timestamp")?Long.valueOf(map.get("timestamp")):-1;
         message = map.containsKey("message")?map.get("message"):null;
+        message = map.containsKey("transaction_code")?map.get("transaction_code"):null;
     }
 
     public boolean isCorrect(){
@@ -105,6 +110,7 @@ public class Card {
         cs.set("code",code);
         cs.set("amount",amount);
         cs.set("timestamp",timestamp);
+        cs.set("transaction_code",transaction_code);
     }
 
     public boolean isAbleToSave(){
@@ -122,6 +128,7 @@ public class Card {
         msg = msg.replace("{message}",getMessage());
         msg = msg.replace("{code}",code+"");
         msg = msg.replace("{amount}",amount+"");
+        msg = msg.replace("{transaction_code}",transaction_code==null?"":transaction_code);
         if(msg.contains("{date}")){
             msg = msg.replace("{date}", KUtils.getDateText(timestamp));
         }
@@ -140,10 +147,13 @@ public class Card {
         builder.append(" amount: "+amount);
         builder.append(" errorMessage: "+message);
         builder.append(" remove: "+remove);
+        builder.append(" transaction_code: "+transaction_code);
         return builder.toString();
     }
 
     public String getMessage() {
+        String msg = NapThe.getPlugin().getMessage("response_text."+code);
+        if(msg!=null) return msg;
         return message==null?"":message;
     }
 
@@ -157,6 +167,12 @@ public class Card {
         if(timestamp>0 && timestamp<base.timestamp) return false;
         if(amount!=null && !amount.equals(base.amount)) return false;
         if(message!=null && !message.equals(base.message)) return false;
+        if(transaction_code!=null && !transaction_code.equals(base.transaction_code)) return false;
         return true;
+    }
+
+    public void systemError() {
+        this.code = 202;
+        this.message = NapThe.getPlugin().getMessage("systemError");
     }
 }

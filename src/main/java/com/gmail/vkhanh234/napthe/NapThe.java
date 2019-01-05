@@ -174,6 +174,7 @@ public final class NapThe extends JavaPlugin{
                 if(page<1 || page>maxPage) return;
                 for(int i=(page-1)*amount;(i<page*amount && i<list.size());i++){
                     Card c = list.get(i);
+//                    String msg = getMessage("history").
                     sender.sendMessage(c.applyPlaceholder(getMessage("history.card")));
                 }
                 if(self){
