@@ -4,6 +4,7 @@ import com.gmail.vkhanh234.napthe.NapThe;
 import com.gmail.vkhanh234.napthe.data.Card;
 import com.gmail.vkhanh234.napthe.data.mysql.MysqlData;
 import com.gmail.vkhanh234.napthe.data.plainfile.PlainfileData;
+import com.gmail.vkhanh234.napthe.type.DoiCard;
 import com.gmail.vkhanh234.napthe.type.GameBank;
 import com.gmail.vkhanh234.napthe.type.Manual;
 import com.gmail.vkhanh234.napthe.type.Recard;
@@ -88,9 +89,12 @@ public class MainConfig {
 
     private void loadMode() {
         mode = config.getString("Mode");
+        // ToDo: Reflection
         if(mode.equalsIgnoreCase("GameBank")) NapThe.getPlugin().setType(new GameBank(config.getConfigurationSection("GameBank")));
         else if(mode.equalsIgnoreCase("Manual")) NapThe.getPlugin().setType(new Manual(config.getConfigurationSection("Manual")));
         else if(mode.equalsIgnoreCase("Recard")) NapThe.getPlugin().setType(new Recard(config.getConfigurationSection("Recard")));
+        else if (mode.equalsIgnoreCase("DoiCard"))
+            NapThe.getPlugin().setType(new DoiCard(config.getConfigurationSection("DoiCard")));
     }
 
     private void loadPrices() {

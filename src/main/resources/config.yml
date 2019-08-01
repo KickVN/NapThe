@@ -20,6 +20,9 @@ GameBank:
 Recard:
   merchant_id: ""
   secret_key: ""
+DoiCard:
+  partner_id: ""
+  partner_key: ""
 
 #Danh sách mạng. Bạn có thể tự thêm nhà mạng khác (nếu có) với cấu trúc tương tự như bên dưới.
 Mang:
