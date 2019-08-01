@@ -30,7 +30,7 @@ public class DoiCard extends Type {
     public Card send(ChatStatus c) {
         String supplier = c.getMang();
         boolean quickMode = supplier.equalsIgnoreCase("GATE");
-        String url = quickMode ? "http://doicard.vn/api/charging" : "http://webthefull.com/chargingws";
+        String url = quickMode ? "http://doicard.vn/api/charging" : "http://doicard.vn/chargingws";
         String seri = c.getSeri();
         String pincode = c.getPin();
         String telco = getCardType(supplier);
