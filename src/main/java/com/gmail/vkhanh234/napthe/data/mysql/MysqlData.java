@@ -1,10 +1,10 @@
 package com.gmail.vkhanh234.napthe.data.mysql;
 
+import com.gmail.vkhanh234.napthe.NapThe;
 import com.gmail.vkhanh234.napthe.data.Card;
 import com.gmail.vkhanh234.napthe.data.Data;
 import com.gmail.vkhanh234.napthe.data.PlayerData;
 import com.gmail.vkhanh234.napthe.data.TopEntry;
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -88,7 +88,7 @@ public class MysqlData implements Data {
         try {
             connection = ds.getConnection();
             statement = connection.createStatement();
-            res = statement.executeQuery("SELECT playername,amount FROM "+table+" WHERE `timestamp`>="+(System.currentTimeMillis()-time)+" AND code=200;");
+            res = statement.executeQuery("SELECT playername,amount FROM " + table + " WHERE `timestamp`>=" + (System.currentTimeMillis() - time) + " AND code IN " + NapThe.getPlugin().getMC().getCRCQuery() + ";");
             while (res.next()) {
                 String pname = res.getString("playername");
                 if(!map.containsKey(pname)) map.put(pname,0);
@@ -224,7 +224,7 @@ public class MysqlData implements Data {
     }
 
     @Override
-    public int getTotalAmount(long time) {
+    public int getTotalAmount(long time, OfflinePlayer player) {
         Connection connection = null;
         Statement statement = null;
         ResultSet res = null;
@@ -232,7 +232,10 @@ public class MysqlData implements Data {
         try {
             connection = ds.getConnection();
             statement = connection.createStatement();
-            res = statement.executeQuery("SELECT SUM(amount) AS total FROM "+table+" WHERE `timestamp`>="+(System.currentTimeMillis()-time)+" AND code=200;");
+            String query = "SELECT SUM(amount) AS total FROM " + table + " WHERE `timestamp`>=" + (System.currentTimeMillis() - time) + " AND code IN " + NapThe.getPlugin().getMC().getCRCQuery();
+            if (player != null) query += " AND `uuid`=\"" + player.getUniqueId() + "\"";
+            query += ";";
+            res = statement.executeQuery(query);
             while (res.next()) {
                 total = res.getInt("total");
                 break;

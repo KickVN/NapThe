@@ -3,6 +3,7 @@ package com.gmail.vkhanh234.napthe.type;
 import com.gmail.vkhanh234.napthe.ChatStatus;
 import com.gmail.vkhanh234.napthe.NapThe;
 import com.gmail.vkhanh234.napthe.data.Card;
+import com.gmail.vkhanh234.napthe.utils.RequestUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -10,16 +11,9 @@ import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
-import javax.net.ssl.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 
 public class GameBank extends Type{
@@ -35,7 +29,7 @@ public class GameBank extends Type{
 		Bukkit.getScheduler().runTaskTimerAsynchronously(NapThe.getPlugin(), new Runnable() {
 			@Override
 			public void run() {
-				loadMang();
+				loadTelco();
 			}
 		},1,interval);
 	}
@@ -55,8 +49,8 @@ public class GameBank extends Type{
 		fields.put("seri", seri);
 		fields.put("pin", pincode);
 		fields.put("note", c.getPlayer()==null?"error no player":c.getPlayer().getName());
-		String requests = this.createRequests(fields);
-		String get = get("https://sv.gamebank.vn/api/card2?"+requests);
+		String requests = RequestUtils.createRequests(fields);
+		String get = RequestUtils.get("https://sv.gamebank.vn/api/card2?" + requests);
 		if(get==null || get=="") return null;
 		Response response = new Gson().fromJson(get,Response.class);
 		Card r = c.cloneCard();
@@ -72,8 +66,8 @@ public class GameBank extends Type{
 		return r;
 	}
 
-	public void loadMang() {
-		String get = get("https://sv.gamebank.vn/trang-thai-he-thong-2");
+	public void loadTelco() {
+		String get = RequestUtils.get("https://sv.gamebank.vn/trang-thai-he-thong-2");
 		if(get==null || get=="") return;
 		JsonArray jsonArray = new Gson().fromJson(get,JsonArray.class);
 		JsonElement element = jsonArray.get(0);
@@ -91,74 +85,6 @@ public class GameBank extends Type{
 		status = newStatus;
 	}
 
-	private String get(String link) {
-		try {
-			installAllTrustManager();
-			URL url = new URL(link);
-			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setInstanceFollowRedirects(false);
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-			conn.setUseCaches(false);
-			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			if (conn.getResponseCode() != 200) {
-				return null;
-			}
-			StringBuilder result = new StringBuilder();
-			String line;
-			while ((line = in.readLine()) != null) {
-				result.append(line);
-			}
-			return result.toString();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	public void installAllTrustManager() {
-		TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-				return null;
-			}
-
-			public void checkClientTrusted(
-					java.security.cert.X509Certificate[] certs, String authType) {
-			}
-
-			public void checkServerTrusted(
-					java.security.cert.X509Certificate[] certs, String authType) {
-			}
-		}};
-
-		// Install the all-trusting trust manager
-		try {
-			SSLContext sc = SSLContext.getInstance("SSL");
-			sc.init(null, trustAllCerts, new java.security.SecureRandom());
-			HttpsURLConnection
-					.setDefaultSSLSocketFactory(sc.getSocketFactory());
-			HttpsURLConnection
-					.setDefaultHostnameVerifier(new HostnameVerifier() {
-						public boolean verify(String urlHostname,
-											  SSLSession _session) {
-							return true;
-						}
-					});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private String createRequests(Map<String, String> map) {
-		String url_params = "";
-		for (Map.Entry entry : map.entrySet()) {
-			if (url_params == "")
-				url_params += entry.getKey() + "=" + entry.getValue();
-			else
-				url_params += "&" + entry.getKey() + "=" + entry.getValue();
-		}
-		return url_params;
-	}
 	private String getCardType(String supplier) {
 		switch (supplier){
 			case("VIETTEL"): return "1";

@@ -1,14 +1,11 @@
 package com.gmail.vkhanh234.napthe.data;
 
-import com.gmail.vkhanh234.napthe.KUtils;
 import com.gmail.vkhanh234.napthe.NapThe;
+import com.gmail.vkhanh234.napthe.utils.KUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
 public class Card {

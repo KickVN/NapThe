@@ -1,10 +1,9 @@
 package com.gmail.vkhanh234.napthe.type;
 
 import com.gmail.vkhanh234.napthe.ChatStatus;
-import com.gmail.vkhanh234.napthe.MainConfig;
 import com.gmail.vkhanh234.napthe.NapThe;
+import com.gmail.vkhanh234.napthe.config.MainConfig;
 import com.gmail.vkhanh234.napthe.data.Card;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -1,9 +1,13 @@
 package com.gmail.vkhanh234.napthe;
 
 import com.gmail.vkhanh234.napthe.command.CommandManager;
+import com.gmail.vkhanh234.napthe.config.GuiConfig;
+import com.gmail.vkhanh234.napthe.config.MainConfig;
 import com.gmail.vkhanh234.napthe.data.*;
+import com.gmail.vkhanh234.napthe.gui.HistoryGui;
 import com.gmail.vkhanh234.napthe.hook.Placeholder;
 import com.gmail.vkhanh234.napthe.type.Type;
+import com.gmail.vkhanh234.napthe.utils.KUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -23,6 +27,7 @@ public final class NapThe extends JavaPlugin{
     public Type type;
     private static  NapThe plugin;
     private MainConfig mc;
+    private GuiConfig guiConfig;
     private Data data;
     private PlayerController playerController;
     private CommandManager commandManager;
@@ -157,10 +162,12 @@ public final class NapThe extends JavaPlugin{
         Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
             @Override
             public void run() {
-                PlayerData playerData = p.isOnline()?playerController.getPlayerData((Player) p):data.loadPlayer(p);
+//                PlayerData playerData = p.isOnline()?playerController.getPlayerData((Player) p):data.loadPlayer(p);
+                PlayerData playerData = data.loadPlayer(p);
                 if(playerData==null) return;
-
+//                System.out.println(playerData.getUniqueId());
                 ArrayList<Card> list = new ArrayList<>(playerData.getCards().values());
+//                System.out.println(list.size());
                 Collections.sort(list, new Comparator<Card>() {
                     @Override
                     public int compare(Card o1, Card o2) {
@@ -168,19 +175,26 @@ public final class NapThe extends JavaPlugin{
                     }
                 });
 
-                int amount = mc.getRowPerPage();
-                int maxPage = Double.valueOf(Math.ceil(list.size()*1.0/amount)).intValue();
-                sender.sendMessage(getMessage("history.message").replace("{player}",p.getName()).replace("{page}",page+"").replace("{total}",maxPage+""));
-                if(page<1 || page>maxPage) return;
-                for(int i=(page-1)*amount;(i<page*amount && i<list.size());i++){
-                    Card c = list.get(i);
-//                    String msg = getMessage("history").
-                    sender.sendMessage(c.applyPlaceholder(getMessage("history.card")));
-                }
-                if(self){
+                if (mc.isEnableHistoryGui() && sender instanceof Player) {
                     Player p = (Player) sender;
-                    for(Card c:list){
-                        if(!c.seen) notifyCard(p,c);
+                    HistoryGui gui = new HistoryGui(p, playerData, page, list);
+                    playerController.getPlayerData(p).setGui(gui);
+                } else {
+
+                    int amount = mc.getRowPerPage();
+                    int maxPage = Double.valueOf(Math.ceil(list.size() * 1.0 / amount)).intValue();
+                    sender.sendMessage(getMessage("history.message").replace("{player}", p.getName()).replace("{page}", page + "").replace("{total}", maxPage + ""));
+                    if (page < 1 || page > maxPage) return;
+                    for (int i = (page - 1) * amount; (i < page * amount && i < list.size()); i++) {
+                        Card c = list.get(i);
+//                    String msg = getMessage("history").
+                        sender.sendMessage(c.applyPlaceholder(getMessage("history.card")));
+                    }
+                    if (self) {
+                        Player p = (Player) sender;
+                        for (Card c : list) {
+                            if (!c.seen) notifyCard(p, c);
+                        }
                     }
                 }
             }
@@ -369,6 +383,8 @@ public final class NapThe extends JavaPlugin{
     {
         mc = new MainConfig();
         mc.load();
+
+        guiConfig = new GuiConfig();
     }
 
 
@@ -406,5 +422,9 @@ public final class NapThe extends JavaPlugin{
 
     public CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    public GuiConfig getGuiConfig() {
+        return guiConfig;
     }
 }

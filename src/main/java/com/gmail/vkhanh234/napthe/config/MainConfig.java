@@ -1,11 +1,13 @@
-package com.gmail.vkhanh234.napthe;
+package com.gmail.vkhanh234.napthe.config;
 
+import com.gmail.vkhanh234.napthe.NapThe;
 import com.gmail.vkhanh234.napthe.data.Card;
 import com.gmail.vkhanh234.napthe.data.mysql.MysqlData;
 import com.gmail.vkhanh234.napthe.data.plainfile.PlainfileData;
 import com.gmail.vkhanh234.napthe.type.GameBank;
 import com.gmail.vkhanh234.napthe.type.Manual;
 import com.gmail.vkhanh234.napthe.type.Recard;
+import com.gmail.vkhanh234.napthe.utils.KUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -37,13 +39,16 @@ public class MainConfig {
     boolean saveCorrect, saveWrong, saveWaiting;
     int rowPerPage;
     String inputRegex,cancelText;
+    List<Integer> correctResponseCode;
+
+    boolean enableHistoryGui;
 
 
     public MainConfig(){
         init();
     }
 
-    void load() {
+    public void load() {
         loadMang();
         loadPrices();
         loadPrizes();
@@ -54,6 +59,10 @@ public class MainConfig {
         rowPerPage = config.getInt("Row_Per_page");
         inputRegex = config.getString("Input_Regex");
         cancelText= config.getString("Cancel_Text");
+
+        correctResponseCode = config.getIntegerList("Correct_Response_Code");
+
+        enableHistoryGui = config.getBoolean("Enable_History_GUI");
     }
 
     public void loadData() {
@@ -90,7 +99,7 @@ public class MainConfig {
         ConfigurationSection cs = config.getConfigurationSection("ChoosePrice.values");
         for(String k:cs.getKeys(false)){
             if(!cs.getBoolean(k+".enable")) continue;
-            prices.put(k,KUtils.convertColor(cs.getString(k+".text")));
+            prices.put(k, KUtils.convertColor(cs.getString(k + ".text")));
         }
 
     }
@@ -216,5 +225,20 @@ public class MainConfig {
             this.enable = enable;
             this.text = text;
         }
+    }
+
+    public List<Integer> getCorrectResponseCode() {
+        return correctResponseCode;
+    }
+
+    public String getCRCQuery() {
+        String s = "(";
+        for (int i : correctResponseCode)
+            s += i + ",";
+        return s.substring(0, s.length() - 1) + ")";
+    }
+
+    public boolean isEnableHistoryGui() {
+        return enableHistoryGui;
     }
 }

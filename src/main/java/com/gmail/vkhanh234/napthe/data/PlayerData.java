@@ -1,9 +1,11 @@
 package com.gmail.vkhanh234.napthe.data;
 
+import com.gmail.vkhanh234.napthe.gui.HistoryGui;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.inventory.ClickType;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -15,6 +17,7 @@ public class PlayerData {
     LinkedHashMap<String,Card> cards = new LinkedHashMap<>();
     String name,uuid;
 
+    HistoryGui gui = null;
     public PlayerData(File configFile){
         this.uuid = configFile.getName().substring(0,configFile.getName().indexOf(".yml"));
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
@@ -62,5 +65,23 @@ public class PlayerData {
 
     public String getUniqueId() {
         return uuid;
+    }
+
+    public void setGui(HistoryGui gui) {
+        this.gui = gui;
+    }
+
+    public void removeGui() {
+        if (gui != null) {
+//            Bukkit.getPlayer(uuid).closeInventory();
+            gui.clear();
+            gui = null;
+        }
+    }
+
+    public boolean click(ClickType type, int slot) {
+        if (gui == null) return false;
+        gui.click(type, slot);
+        return true;
     }
 }

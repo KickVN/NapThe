@@ -20,13 +20,6 @@ GameBank:
 Recard:
   merchant_id: ""
   secret_key: ""
-  database:
-    ip: "localhost"
-    port: 3306
-    user: "root"
-    password: ""
-    database: "napthe"
-    table: "cards"
 
 #Danh sách mạng. Bạn có thể tự thêm nhà mạng khác (nếu có) với cấu trúc tương tự như bên dưới.
 Mang:
@@ -85,7 +78,8 @@ ChoosePrice:
       enable: true
       text: "1.000.000"
 
-# Phần thưởng người chơi nhận được dưới dạng command console sau khi nạp thành công. Tương tự, bạn có thể tùy ý thêm phần thưởng cho giá khác hoặc thêm command phần thưởng.
+# Phần thưởng người chơi nhận được dưới dạng command console sau khi nạp thành công.
+# Tương tự, bạn có thể tùy ý thêm phần thưởng cho giá khác hoặc thêm command phần thưởng.
 Prize:
   #10 ~ Cho thẻ 10k
   10:
@@ -153,6 +147,7 @@ Data:
 # Một số message có hỗ trợ placeholder để lấy thông tin của thẻ cào.
 # Các placeholder đó gồm có: {id}, {seri}, {pin}, {mang}, {date}, {amount}, {code}, {message}
 Message:
+  playerNotFound: "&cKhông tìm thấy người chơi này"
   successReload: "&aReload thành công"
   hover: "Nhấn vào để chọn"
   choose: "&cChọn nhà mạng"
@@ -185,7 +180,7 @@ Message:
   history:
     loading: "Đang load lịch sử..."
     message: "Lịch sử nạp thẻ của {player} ({page}/{total})"
-    card: "{date} Mạng:{mang} Seri:{seri} Pin:{pin} Gia:{amount} {message}"
+    card: "{date} Mạng:{mang} Seri:{seri} Pin:{pin} Giá:{amount} {message}"
   search:
     loading: "Đang load kết quả tìm kiếm..."
     message: "Kết quả tìm kiếm ({page}/{total})"
@@ -203,4 +198,9 @@ Message:
     201: "Đang chờ duyệt"
     202: "Thẻ sai"
     203: "Đang chờ duyệt"
-
+#Trạng thái thẻ đúng
+Correct_Response_Code:
+  - 200
+  - 1
+#Sử dụng GUI cho lịch sử
+Enable_History_GUI: true

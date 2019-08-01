@@ -62,9 +62,10 @@ public class PlainfileData implements Data {
         pfc.savePlayer(data);
     }
 
-    public int getTotalAmount(long time) {
+    @Override
+    public int getTotalAmount(long time, OfflinePlayer player) {
         if(pfc==null) return -1;
-        return pfc.getTotalAmount(time);
+        return pfc.getTotalAmount(time, player);
     }
 
     @Override

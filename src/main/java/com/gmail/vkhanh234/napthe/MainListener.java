@@ -3,7 +3,10 @@ package com.gmail.vkhanh234.napthe;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -61,5 +64,15 @@ public class MainListener implements Listener {
                 NapThe.getPlugin().getPC().unloadPlayer(e.getPlayer());
             }
         });
+    }
+
+    @EventHandler
+    public void onClose(InventoryCloseEvent e) {
+        NapThe.getPlugin().getPC().getPlayerData((Player) e.getPlayer()).removeGui();
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onClick(InventoryClickEvent e) {
+        e.setCancelled(NapThe.getPlugin().getPC().getPlayerData((Player) e.getWhoClicked()).click(e.getClick(), e.getSlot()));
     }
 }

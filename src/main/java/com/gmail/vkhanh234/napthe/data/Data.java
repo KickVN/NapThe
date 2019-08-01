@@ -10,7 +10,8 @@ public interface Data {
     public PlayerData loadPlayer(OfflinePlayer p);
     public boolean addCard(PlayerData p, Card c);
     public void savePlayer(PlayerData data);
-    public int getTotalAmount(long time);
+
+    public int getTotalAmount(long time, OfflinePlayer player);
     public void close();
     public Card getCard(String id);
     public boolean updateCard(Card c);

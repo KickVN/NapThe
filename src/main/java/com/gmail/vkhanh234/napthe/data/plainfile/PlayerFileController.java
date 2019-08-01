@@ -11,7 +11,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by KickVN on 15/2/2016.
@@ -78,17 +80,27 @@ public class PlayerFileController {
         }
     }
 
-    public int getTotalAmount(long time) {
-        int t=0;
-        for(File file:FOLDER.listFiles()){
-            if(!file.getName().endsWith(".yml")) continue;
-            PlayerData data = loadFileData(file);
-            if(data==null || data.countCards()==0) continue;
-            int amount = data.getSumAmount(time);
-            if(amount==0) continue;
-            t+=amount;
+    public int getTotalAmount(long time, OfflinePlayer player) {
+        if (player == null) {
+            int t = 0;
+            for (File file : FOLDER.listFiles()) {
+                if (!file.getName().endsWith(".yml")) continue;
+                t += getTotalAmount(file, time);
+            }
+            return t;
+        } else {
+            File file = new File(FOLDER, player.getUniqueId() + ".yml");
+            if (!file.exists()) return 0;
+            return getTotalAmount(file, time);
         }
-        return t;
+    }
+
+    private int getTotalAmount(File file, long time) {
+        PlayerData data = loadFileData(file);
+        if (data == null || data.countCards() == 0) return 0;
+        int amount = data.getSumAmount(time);
+        if (amount == 0) return 0;
+        return amount;
     }
 
     public List<Card> getCard(Card base) {

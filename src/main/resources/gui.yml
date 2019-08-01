@@ -1,0 +1,68 @@
+History:
+  size: 45
+  name: "Lịch sử ({page}/{total})"
+  items:
+    next:
+      material: PAPER
+      name: "Trang sau"
+    prev:
+      material: PAPER
+      name: "Trang trước"
+    filler:
+      material: STAINED_GLASS_PANE
+    cards:
+      1:
+        material: STAINED_GLASS_PANE:5
+        name: "Thành công"
+        lore:
+          - 'Ngày: {date}'
+          - 'Mạng: {mang}'
+          - 'Seri: {seri}'
+          - 'Pin: {pin}'
+          - 'Giá: {amount}'
+          - ''
+          - '{message}'
+      202:
+        material: STAINED_GLASS_PANE:14
+        name: "Thẻ sai"
+        lore:
+          - 'Ngày: {date}'
+          - 'Mạng:{mang}'
+          - 'Seri:{seri}'
+          - 'Pin:{pin}'
+          - 'Gia:{amount}'
+          - ''
+          - '{message}'
+      201:
+        material: STAINED_GLASS_PANE:4
+        name: "Đang chờ duyệt"
+        lore:
+          - 'Ngày: {date}'
+          - 'Mạng:{mang}'
+          - 'Seri:{seri}'
+          - 'Pin:{pin}'
+          - 'Gia:{amount}'
+          - ''
+          - '{message}'
+      203:
+        material: STAINED_GLASS_PANE:4
+        name: "Đang chờ duyệt"
+        lore:
+          - 'Ngày: {date}'
+          - 'Mạng:{mang}'
+          - 'Seri:{seri}'
+          - 'Pin:{pin}'
+          - 'Gia:{amount}'
+          - ''
+          - '{message}'
+      200:
+        material: STAINED_GLASS_PANE:5
+        name: "Thành công"
+        lore:
+          - 'Ngày: {date}'
+          - 'Mạng: {mang}'
+          - 'Seri: {seri}'
+          - 'Pin: {pin}'
+          - 'Giá: {amount}'
+          - ''
+          - '{message}'
