@@ -60,7 +60,6 @@ public class HistoryGui {
             inventory.setItem(pos, item);
             pos++;
         }
-//        for(;pos<size-9;pos++) inventory.setItem(pos,new ItemStack(Material.AIR));
         for (int i = 0; i < 9; ++i)
             inventory.setItem(size - 1 - i, NapThe.getPlugin().getGuiConfig().getHistoryFiller());
         if (page > 1) inventory.setItem(size - 9, NapThe.getPlugin().getGuiConfig().getHistoryPrev());

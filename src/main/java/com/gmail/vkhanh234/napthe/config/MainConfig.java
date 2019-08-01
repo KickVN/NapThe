@@ -114,7 +114,6 @@ public class MainConfig {
     private void loadMang() {
         ConfigurationSection cs = config.getConfigurationSection("Mang");
         for(String k:cs.getKeys(false)){
-//            if(!cs.getBoolean(k+".enable")) continue;
             nhamang.put(k.toUpperCase(),new Nhamang(cs.getBoolean(k+".enable"),KUtils.convertColor(cs.getString(k+".text"))));
         }
     }

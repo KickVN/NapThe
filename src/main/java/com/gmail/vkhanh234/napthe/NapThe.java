@@ -162,12 +162,9 @@ public final class NapThe extends JavaPlugin{
         Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
             @Override
             public void run() {
-//                PlayerData playerData = p.isOnline()?playerController.getPlayerData((Player) p):data.loadPlayer(p);
                 PlayerData playerData = data.loadPlayer(p);
                 if(playerData==null) return;
-//                System.out.println(playerData.getUniqueId());
                 ArrayList<Card> list = new ArrayList<>(playerData.getCards().values());
-//                System.out.println(list.size());
                 Collections.sort(list, new Comparator<Card>() {
                     @Override
                     public int compare(Card o1, Card o2) {

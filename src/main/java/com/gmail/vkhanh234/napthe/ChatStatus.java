@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
  * Created by Admin on 10/10/2015.
  */
 public class ChatStatus {
-//    int stage = 0;
     Stage stage = Stage.NONE;
     Player player;
     Card card = new Card();

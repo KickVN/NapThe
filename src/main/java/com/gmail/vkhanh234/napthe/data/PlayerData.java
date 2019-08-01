@@ -73,7 +73,6 @@ public class PlayerData {
 
     public void removeGui() {
         if (gui != null) {
-//            Bukkit.getPlayer(uuid).closeInventory();
             gui.clear();
             gui = null;
         }

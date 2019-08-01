@@ -67,9 +67,6 @@ public class CommandManager {
 
     private void sendCommandHelp(CommandSender sender, BaseCommand c){
         c.sendHelp(sender);
-//        String msg = NapThe.getPlugin().getMessage("help."+c.getId());
-//        if(msg==null) return;
-//        sender.sendMessage(msg);
     }
 
     private boolean hasPerm(CommandSender sender, BaseCommand c) {
