@@ -11,10 +11,10 @@ permissions:
         NapThe.command.choose: true
         NapThe.command.price: true
         NapThe.command.info: true
-        NapThe.command.lichsu: true
         NapThe.command.history: true
         NapThe.command.top: true
         NapThe.command.status: true
+        NapThe.command.redeem: true
       description: Allows you to use basic commands.
       default: true
     NapThe.admin:

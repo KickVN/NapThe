@@ -11,7 +11,8 @@ public class InfoCommand extends BaseCommand{
 
     public InfoCommand(){
         addAliases("info");
-        setIgnorePerm(true);
+        setAlwaysShow();
+        setAlwaysUsable(true);
     }
 
     @Override

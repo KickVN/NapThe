@@ -9,9 +9,14 @@ import java.util.List;
  * Created by KickVN on 18-Apr-18.
  */
 public abstract class BaseCommand {
+    public enum DisplayType {
+        PERMISSION, ALWAYS_SHOW, HIDE_IGNORE_PERM;
+    }
     List<String> aliases = new ArrayList<>();
     String label;
-    boolean ignorePerm=false;
+    DisplayType displayType = DisplayType.PERMISSION;
+    boolean alwaysUsable;
+
     public abstract boolean onCommand(CommandSender sender, String[] args);
 
     public List<String> getAliases() {
@@ -38,13 +43,36 @@ public abstract class BaseCommand {
         this.label = label;
     }
 
-    public boolean isIgnorePerm() {
-        return ignorePerm;
+    public boolean isAlwaysShow() {
+        return displayType.equals(DisplayType.ALWAYS_SHOW);
     }
 
-    public void setIgnorePerm(boolean ignorePerm) {
-        this.ignorePerm = ignorePerm;
+    public void setAlwaysShow() {
+        this.displayType = DisplayType.ALWAYS_SHOW;
+    }
+
+    public boolean isAlwaysUsable() {
+        return alwaysUsable;
+    }
+
+    public void setAlwaysUsable(boolean alwaysUsable) {
+        this.alwaysUsable = alwaysUsable;
+    }
+
+    public boolean isHideIgnorePerm() {
+        return displayType.equals(DisplayType.HIDE_IGNORE_PERM);
+    }
+
+    public void setHideIgnorePerm() {
+        this.displayType = DisplayType.HIDE_IGNORE_PERM;
     }
 
     public abstract void sendHelp(CommandSender sender);
+
+    public boolean hasPermission(CommandSender sender, String prefix) {
+        for (String s : aliases) {
+            if (sender.hasPermission(prefix + s)) return true;
+        }
+        return false;
+    }
 }

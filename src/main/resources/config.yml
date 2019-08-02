@@ -190,8 +190,8 @@ Message:
     card: "{id} - {date} - {mang} - S: {seri} - P: {pin} - $:{amount} - C: {code}"
   # Thông báo sau khi nạp. Bạn có thể tự thêm cho các code (mã trạng thái) khác nếu cần thiết.
   response_message:
-    default: "&cLỗi {code}: {message} (Card {mang} {seri} {pin})"
-    200: "&aĐã nạp thành công {amount} VND (Card {mang} {seri} {pin})"
+    default: "&cLỗi {code}: {message} (Card &a{mang} &e{seri} &b{pin})"
+    200: "&aĐã nạp thành công {amount} VND (Card &a{mang} &e{seri} &b{pin})"
     201: "&bVui lòng chờ duyệt"
     202: "&cThẻ &a{mang} &e{seri} &b{pin} &ckhông được chấp nhận"
     203: "&aNạp thành công. Vui lòng đợi thẻ được duyệt."

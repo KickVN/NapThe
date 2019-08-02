@@ -12,6 +12,7 @@ public class ChooseCommand extends BaseCommand{
 
     public ChooseCommand(){
         addAliases("choose");
+        setHideIgnorePerm();
     }
 
     @Override

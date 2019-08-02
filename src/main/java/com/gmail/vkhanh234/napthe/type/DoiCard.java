@@ -30,7 +30,7 @@ public class DoiCard extends Type {
     public Card send(ChatStatus c) {
         String supplier = c.getMang();
         boolean quickMode = supplier.equalsIgnoreCase("GATE");
-        String url = quickMode ? "http://doicard.vn/api/charging" : "http://doicard.vn/chargingws";
+        String url = quickMode ? "https://doicard.vn/api/charging" : "https://doicard.vn/chargingws";
         String seri = c.getSeri();
         String pincode = c.getPin();
         String telco = getCardType(supplier);
@@ -69,7 +69,7 @@ public class DoiCard extends Type {
         } else if (response.status == 99) {
             r.setCode(203);
         } else {
-            r.code = 202;
+            r.code = response.status;
             r.message = response.message;
         }
         return r;

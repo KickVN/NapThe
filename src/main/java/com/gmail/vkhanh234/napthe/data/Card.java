@@ -149,9 +149,8 @@ public class Card {
     }
 
     public String getMessage() {
-        String msg = NapThe.getPlugin().getMessage("response_text."+code);
-        if(msg!=null) return msg;
-        return message==null?"":message;
+        String cfgMsg = NapThe.getPlugin().getMessage("response_text." + code);
+        return message == null ? (cfgMsg == null ? "" : cfgMsg) : message;
     }
 
     public boolean isSimilar(Card base) {

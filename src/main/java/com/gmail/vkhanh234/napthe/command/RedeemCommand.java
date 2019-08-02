@@ -8,21 +8,20 @@ import org.bukkit.entity.Player;
 /**
  * Created by KickVN on 18-Apr-18.
  */
-public class PriceCommand extends BaseCommand{
+public class RedeemCommand extends BaseCommand {
 
-    public PriceCommand(){
-        addAliases("price");
-        setHideIgnorePerm();
+    public RedeemCommand() {
+        addAliases("redeem", "napthe", "nap", "start");
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        NapThe.getPlugin().choosePrice((Player) sender,args[0]);
+        NapThe.getPlugin().sendChooser((Player) sender);
         return true;
     }
 
     @Override
     public void sendHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD+"/napthe price <giá_tiền>"+ChatColor.RESET+" - chọn giá tiền. Sử dụng sau khi chọn mạng.");
+        sender.sendMessage(ChatColor.GOLD + "/napthe nap" + ChatColor.RESET + " - nạp thẻ");
     }
 }

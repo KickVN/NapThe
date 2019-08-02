@@ -41,7 +41,7 @@ public class HistoryGui {
         int pos = 0;
         for (int i = (page - 1) * amount; (i < page * amount && i < list.size()); i++) {
             Card c = list.get(i);
-            ItemStack item = NapThe.getPlugin().getGuiConfig().getHistoryCards().get(c.code).clone();
+            ItemStack item = NapThe.getPlugin().getGuiConfig().fetchHistoryItem(c.code);
             if (item == null) {
                 inventory.setItem(pos, new ItemStack(Material.AIR));
                 pos++;

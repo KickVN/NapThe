@@ -11,6 +11,17 @@ History:
     filler:
       material: STAINED_GLASS_PANE
     cards:
+      default:
+        material: STAINED_GLASS_PANE:2
+        name: "Lỗi"
+        lore:
+          - 'Ngày: {date}'
+          - 'Mạng: {mang}'
+          - 'Seri: {seri}'
+          - 'Pin: {pin}'
+          - 'Giá: {amount}'
+          - ''
+          - '{code}: {message}'
       1:
         material: STAINED_GLASS_PANE:5
         name: "Thành công"

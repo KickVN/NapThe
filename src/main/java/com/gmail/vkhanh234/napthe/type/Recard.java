@@ -60,7 +60,7 @@ public class Recard extends Type{
 			r.setCode(203);
 		}
 		else {
-			r.code = 422;
+			r.code = 202;
 			r.message = getError(post);
 		}
 		return r;

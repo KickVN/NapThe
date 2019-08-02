@@ -23,6 +23,7 @@ public class CommandManager {
         commands.add(new ChooseCommand());
         commands.add(new PriceCommand());
         commands.add(new GiveCommand());
+        commands.add(new RedeemCommand());
         if(NapThe.getPlugin().getData().isDetailAvailable()){
             commands.add(new TopCommand());
             commands.add(new HistoryCommand());
@@ -49,6 +50,7 @@ public class CommandManager {
             if(!b) sendCommandHelp(sender,c);
             return;
         }
+        sendAllHelp(sender, cmd.getName());
     }
 
     private String[] fetchArgs(String[] args) {
@@ -57,10 +59,11 @@ public class CommandManager {
         return ar;
     }
 
-    private void sendAllHelp(CommandSender sender, String label) {
+    public void sendAllHelp(CommandSender sender, String label) {
         for(BaseCommand c:commands){
             if(!c.isRightLabel(label)) continue;
-            if(!hasPerm(sender,c)) continue;
+            if (c.isHideIgnorePerm() && !isSuperior(sender)) continue;
+            if (!hasPerm(sender, c) && !c.isAlwaysShow()) continue;
             sendCommandHelp(sender,c);
         }
     }
@@ -71,7 +74,10 @@ public class CommandManager {
 
     private boolean hasPerm(CommandSender sender, BaseCommand c) {
         if(c.getId()==null) return false;
-        if(c.isIgnorePerm()) return true;
-        return sender.hasPermission(NapThe.getPlugin().getName()+".command.*") || sender.hasPermission(NapThe.getPlugin().getName()+".admin") || sender.hasPermission(NapThe.getPlugin().getName()+".command."+c.getId());
+        return isSuperior(sender) || c.hasPermission(sender, NapThe.getPlugin().getName() + ".command.");
+    }
+
+    public boolean isSuperior(CommandSender sender) {
+        return sender.isOp() || sender.hasPermission(NapThe.getPlugin().getName() + ".command.*") || sender.hasPermission(NapThe.getPlugin().getName() + ".admin");
     }
 }

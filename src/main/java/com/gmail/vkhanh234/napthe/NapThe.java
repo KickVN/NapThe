@@ -77,13 +77,6 @@ public final class NapThe extends JavaPlugin{
         });
     }
 
-    public boolean hasPermission(CommandSender sender, String p) {
-        if(sender.isOp()) return true;
-        if(sender.hasPermission("napthe."+p)) return true;
-        sender.sendMessage(getMessage("noPerm"));
-        return false;
-    }
-
     public void showStatus(CommandSender sender) {
         sender.sendMessage(getMessage("status.message"));
         for(String s:mc.getNhamang().keySet()){
@@ -100,7 +93,7 @@ public final class NapThe extends JavaPlugin{
     }
 
     public void showTop(final CommandSender sender, final int page, final long time) {
-        sender.sendMessage("top.loading");
+        sender.sendMessage(getMessage("top.loading"));
         Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
             @Override
             public void run() {
@@ -157,13 +150,20 @@ public final class NapThe extends JavaPlugin{
     }
 
     public void showHistory(CommandSender sender, final OfflinePlayer p, final int page){
+        if (p == null || !p.hasPlayedBefore()) {
+            sender.sendMessage(getMessage("playerNotFound"));
+            return;
+        }
         sender.sendMessage(getMessage("history.loading"));
         boolean self = ((sender instanceof Player) && ((Player) sender).getUniqueId().equals(p.getUniqueId()));
         Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
             @Override
             public void run() {
                 PlayerData playerData = data.loadPlayer(p);
-                if(playerData==null) return;
+                if (playerData == null) {
+                    sender.sendMessage(NapThe.getPlugin().getMessage("playerNotFound"));
+                    return;
+                }
                 ArrayList<Card> list = new ArrayList<>(playerData.getCards().values());
                 Collections.sort(list, new Comparator<Card>() {
                     @Override
@@ -184,7 +184,6 @@ public final class NapThe extends JavaPlugin{
                     if (page < 1 || page > maxPage) return;
                     for (int i = (page - 1) * amount; (i < page * amount && i < list.size()); i++) {
                         Card c = list.get(i);
-//                    String msg = getMessage("history").
                         sender.sendMessage(c.applyPlaceholder(getMessage("history.card")));
                     }
                     if (self) {

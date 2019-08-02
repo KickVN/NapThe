@@ -24,7 +24,7 @@ public class GuiConfig {
     private String historyName;
     private int historySize;
     private ItemStack historyNext, historyPrev, historyFiller;
-    private HashMap<Integer, ItemStack> historyCards = new HashMap<>();
+    private HashMap<String, ItemStack> historyCards = new HashMap<>();
 
     public GuiConfig() {
         configFile = new File(NapThe.getPlugin().getDataFolder(), filename);
@@ -46,7 +46,7 @@ public class GuiConfig {
         historyFiller = KUtils.getItem(config.getConfigurationSection("History.items.filler"));
         ConfigurationSection cs = config.getConfigurationSection("History.items.cards");
         for (String s : cs.getKeys(false)) {
-            historyCards.put(Integer.valueOf(s), KUtils.getItem(cs.getConfigurationSection(s)));
+            historyCards.put(s, KUtils.getItem(cs.getConfigurationSection(s)));
         }
     }
 
@@ -96,11 +96,17 @@ public class GuiConfig {
         return historyFiller.clone();
     }
 
-    public HashMap<Integer, ItemStack> getHistoryCards() {
+    public HashMap<String, ItemStack> getHistoryCards() {
         return historyCards;
     }
 
     public String getHistoryName() {
         return historyName;
+    }
+
+    public ItemStack fetchHistoryItem(int code) {
+        String key = String.valueOf(code);
+        ItemStack item = historyCards.containsKey(key) ? historyCards.get(key) : historyCards.get("default");
+        return item.clone();
     }
 }
